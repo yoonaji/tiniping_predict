@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>티니필터</title>
+    <link rel="stylesheet" href="static/css/main.css">
+    <style>
+        #tiniping-image {
+            display: none;
+            margin-top: 20px;
+            max-width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        #loading {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">사진 업로드 및 분석</h1>
+        <form action="/" method="post" enctype="multipart/form-data" class="mt-4">
+            <div class="mb-3">
+                <label for="photo" class="form-label">분석할 사진 선택:</label>
+                <input type="file" class="form-control" id="photo" name="photo" accept="image/*" required>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">분석 시작</button>
+            </div>
+        </form>
+        <div id="loading" class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p>분석 중입니다. 잠시만 기다려주세요...</p>
+        </div>
+        <img id="tiniping-image" src="" alt="티니핑 이미지">
+        <p id="result-name" class="text-center mt-3"></p>
+    </div>
+    <script>
+        const form = document.querySelector('form');
+        const loading = document.getElementById('loading');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            loading.style.display = 'block';
+            const formData = new FormData(form);
+
+            fetch('/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = 'none';
+                if (data.tiniping && data.tiniping.image_url) {
+                    const img = document.getElementById('tiniping-image');
+                    img.src = data.tiniping.image_url;
+                    img.alt = data.tiniping.name;
+                    img.style.display = 'block';
+                } else {
+                    alert('분석 결과를 가져오지 못했습니다.');
+                }
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                console.error('Error:', error);
+            });
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

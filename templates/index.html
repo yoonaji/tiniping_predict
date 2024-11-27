@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TinyPing API 테스트</title>
+</head>
+<body>
+    <h1>TinyPing API 테스트 페이지</h1>
+    
+    <!-- 파일 업로드 섹션 (POST 요청으로 /upload 엔드포인트 접근) -->
+    <h2>1. 이미지 파일 업로드 및 데이터베이스 저장</h2>
+    <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+        <label for="name">티니핑 이름 (선택 사항):</label>
+        <input type="text" id="name" name="name" placeholder="이름을 입력하세요">
+        <br><br>
+        
+        <label for="file">이미지 파일 선택:</label>
+        <input type="file" id="file" name="file" accept="image/*" required>
+        <br><br>
+        
+        <button type="button" onclick="uploadTinyPing()">이미지 업로드</button>
+    </form>
+    <div id="uploadResult"></div>
+
+    <!-- 사진 분석 섹션 (POST 요청으로 /analyze-photo 엔드포인트 접근) -->
+    <h2>2. AI 모델을 통한 사진 분석</h2>
+    <form id="analyzeForm" action="/analyze-photo" method="post">
+        <label for="photo_url">이미지 URL 입력:</label>
+        <input type="text" id="photo_url" name="photo_url" placeholder="이미지 URL을 입력하세요" required>
+        <br><br>
+        
+        <button type="button" onclick="analyzePhoto()">사진 분석</button>
+    </form>
+    <div id="analyzeResult"></div>
+
+    <script>
+        // 이미지 업로드 및 데이터베이스 저장 함수 (POST 요청으로 /upload 엔드포인트 접근)
+        async function uploadTinyPing() {
+            const form = document.getElementById('uploadForm');
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('uploadResult').innerHTML = `
+                        <p>업로드 성공!</p>
+                        <p>이름: ${result.name || '없음'}</p>
+                        <p>이미지 URL: <a href="${result.url || result.image_url}" target="_blank">${result.url || result.image_url}</a></p>
+                    `;
+                } else {
+                    document.getElementById('uploadResult').innerHTML = `<p>오류: ${result.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('uploadResult').innerHTML = `<p>오류 발생: ${error.message}</p>`;
+            }
+        }
+
+        // 사진 분석 함수 (POST 요청으로 /analyze-photo 엔드포인트 접근)
+        async function analyzePhoto() {
+            const photoUrl = document.getElementById('photo_url').value;
+
+            try {
+                const response = await fetch('/analyze-photo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ photo_url: photoUrl })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('analyzeResult').innerHTML = `
+                        <p>분석 성공!</p>
+                        <p>닮은 티니핑 이름: ${result.name}</p>
+                        <p>ID: ${result.id}</p>
+                    `;
+                } else {
+                    document.getElementById('analyzeResult').innerHTML = `<p>오류: ${result.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('analyzeResult').innerHTML = `<p>오류 발생: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

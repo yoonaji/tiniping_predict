@@ -1,0 +1,72 @@
+/* 전체 배경 설정 */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* 전체 화면 높이 지정 */
+  width: 100%;  /* 전체 화면 너비 지정 */
+  background: linear-gradient(135deg, #e37682 15%, #5f4d93 85%); /* 부드러운 그라데이션 */
+  color: white; /* 텍스트 색상 */
+  font-family: 'Arial', sans-serif; /* 기본 글꼴 */
+}
+
+/* 제목 스타일 */
+h1 {
+  font-size: 3rem; /* 제목 크기 */
+  text-align: center; /* 제목 가운데 정렬 */
+  margin-top: 20px;
+}
+
+/* 컨테이너 설정 */
+.container {
+  max-width: 600px; /* 컨텐츠 최대 너비 */
+  margin: 0 auto; /* 화면 가운데 정렬 */
+  padding: 20px;
+  text-align: center; /* 내부 요소 가운데 정렬 */
+}
+
+/* 라벨 스타일 */
+label {
+  font-size: 1.5rem; /* 라벨 글자 크기 */
+}
+
+/* 버튼 스타일 */
+button {
+  font-size: 1.2rem; /* 버튼 글자 크기 */
+  padding: 10px 20px; /* 버튼 여백 */
+  background-color: #ffffff; /* 버튼 배경색 */
+  color: #ff758c; /* 버튼 텍스트 색 */
+  border: none;
+  border-radius: 8px; /* 버튼 모서리 둥글게 */
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 20px; /* 파일 선택 입력과 버튼 사이 여백 */
+}
+
+button:hover {
+  background-color: #ff7eb3; /* 버튼 호버 배경 */
+  color: white; /* 버튼 호버 글자 색 */
+}
+
+/* 파일 선택 입력 */
+input[type="file"] {
+  font-size: 1rem;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: white;
+  color: #ff758c;
+  margin-top: 10px; /* 라벨과 입력 간의 여백 추가 */
+}
+
+/* 일반 텍스트 */
+p {
+  font-size: 1.2rem;
+}
+
+/* 분석 결과 이미지 */
+#tiniping-image {
+  margin: auto;
+  max-width: 100%;
+  border: 2px solid white;
+  border-radius: 10px;
+}
